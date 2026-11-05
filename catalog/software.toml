@@ -1,0 +1,774 @@
+# watchapp 软件目录（唯一数据源）
+# 字段说明见 catalog/README.md；修改后运行：
+#   python scripts/watchapp.py validate
+#   python scripts/watchapp.py render
+# 生成 catalog/software.md（勿手改生成物）。
+
+schema = 1
+updated = "2026-11-04"
+source = "toolchain-inventory 2026-11-03 扫描 + tools-config/software.md"
+
+[preferences]
+# 个人安装习惯：便携优先；Windows 按领域分目录；开发环境用 WSL。
+prefer_portable = true
+windows_root = 'D:\software'
+windows_layout = 'D:\software\<领域>\<软件>'
+dev_environment = "wsl"
+
+# ---------------------------------------------------------------------------
+# 系统与终端
+# ---------------------------------------------------------------------------
+
+[[software]]
+id = "windows-11"
+name = "Windows 11"
+category = "系统与终端"
+scenarios = ["company"]
+status = "active"
+policy = "observe"
+purpose = "公司机宿主系统"
+docs = ["https://learn.microsoft.com/en-us/windows/release-health/windows11-release-information"]
+windows = { latest = "25H2 26200.8875", manager = "manual", command = "设置 → Windows 更新" }
+
+[[software]]
+id = "wsl"
+name = "WSL"
+category = "系统与终端"
+scenarios = ["company", "home"]
+status = "active"
+policy = "p0"
+purpose = "Windows 上的 Linux 开发环境"
+docs = ["https://learn.microsoft.com/en-us/windows/wsl/"]
+windows = { latest = "3.0.3.0", manager = "manual", command = "wsl --update", note = "winget 源 Microsoft.WSL 可能滞后，优先 wsl --update / Store 更新" }
+
+[[software]]
+id = "windows-terminal"
+name = "Windows Terminal"
+category = "系统与终端"
+scenarios = ["company", "home"]
+status = "active"
+policy = "p0"
+purpose = "主力终端"
+docs = ["https://learn.microsoft.com/en-us/windows/terminal/"]
+windows = { latest = "1.25.2733.0", manager = "winget", package = "Microsoft.WindowsTerminal", note = "winget 报 0x80072ee2 时改用官方 msixbundle + Add-AppxPackage" }
+
+[[software]]
+id = "powershell"
+name = "PowerShell 7"
+category = "系统与终端"
+scenarios = ["company", "home"]
+status = "active"
+policy = "p0"
+purpose = "默认 shell；替代 Windows PowerShell 5.1"
+docs = ["https://learn.microsoft.com/en-us/powershell/"]
+windows = { latest = "7.6.9", manager = "winget", package = "Microsoft.PowerShell", note = "优先 MSI 安装；5.1 仍在系统中，勿卸载" }
+
+[[software]]
+id = "app-installer"
+name = "App Installer (winget)"
+category = "系统与终端"
+scenarios = ["company", "home"]
+status = "active"
+policy = "p1"
+purpose = "Windows 包管理器"
+docs = ["https://learn.microsoft.com/en-us/windows/package-manager/"]
+windows = { latest = "1.29.380", manager = "winget", package = "Microsoft.AppInstaller" }
+
+[[software]]
+id = "tabby"
+name = "Tabby"
+category = "系统与终端"
+scenarios = ["company"]
+status = "active"
+policy = "p1"
+purpose = "终端（主题 OneHalfDark）"
+docs = ["https://tabby.sh/"]
+windows = { latest = "1.0.238", manager = "winget", package = "Eugeny.Tabby", note = "便携目录（具体路径不入库）；官方 NSIS 静默安装" }
+
+[[software]]
+id = "elyterminal"
+name = "Elyterminal"
+category = "系统与终端"
+scenarios = ["company"]
+status = "stopped"
+policy = "hold"
+purpose = "终端（无公开文档）"
+windows = { latest = "未标注", manager = "manual", command = "无公开发布记录" }
+
+[[software]]
+id = "vscode"
+name = "Visual Studio Code"
+category = "编辑器"
+scenarios = ["company", "home"]
+status = "active"
+policy = "p0"
+purpose = "主力编辑器；WSL Remote 开发"
+docs = ["https://code.visualstudio.com/docs", "https://code.visualstudio.com/updates"]
+windows = { latest = "1.144.0", manager = "winget", package = "Microsoft.VisualStudioCode", scope = "user", note = "User 安装；升级前关闭 VS Code" }
+
+[[software]]
+id = "zed"
+name = "Zed"
+category = "编辑器"
+scenarios = ["company"]
+status = "active"
+policy = "p1"
+purpose = "轻量编辑器（周更）"
+docs = ["https://zed.dev/docs/"]
+windows = { latest = "1.26.2", manager = "winget", package = "ZedIndustries.Zed", note = "实际装在用户级 Programs 目录；另有空壳目录（路径不入库）" }
+
+[[software]]
+id = "neovim"
+name = "Neovim"
+category = "编辑器"
+scenarios = ["company"]
+status = "active"
+policy = "p1"
+purpose = "终端编辑器"
+docs = ["https://neovim.io/doc/"]
+wsl = { latest = "0.12.6", manager = "manual", command = "官方 tar 解压到 ~/.local/opt/nvim-<版本>，软链/优先 ~/.local/bin/nvim", note = "apt 的 /usr/bin/nvim 仍是 0.9.5，两者并存" }
+
+[[software]]
+id = "git"
+name = "Git"
+category = "开发工具"
+scenarios = ["company", "home"]
+status = "active"
+policy = "p1"
+purpose = "版本控制"
+docs = ["https://git-scm.com/docs"]
+windows = { latest = "2.56.0.windows.4", manager = "manual", command = "官方安装器覆盖现有便携安装（路径不入库）", note = "未加入 PATH；Windows 侧实际用 TortoiseSVN + WSL git" }
+wsl = { latest = "2.43.0", manager = "apt", package = "git", note = "日常够用；如需新版用 git PPA 或源码" }
+
+[[software]]
+id = "tortoisesvn"
+name = "TortoiseSVN"
+category = "开发工具"
+scenarios = ["company"]
+status = "active"
+policy = "p2"
+purpose = "SVN 图形客户端"
+docs = ["https://tortoisesvn.net/docs/release/TortoiseSVN_en/"]
+windows = { latest = "1.14.9.29743", manager = "winget", package = "TortoiseSVN.TortoiseSVN", note = "1.15 是大版本，按使用频率决定" }
+
+[[software]]
+id = "clang-format"
+name = "clang-format"
+category = "开发工具"
+scenarios = ["company"]
+status = "active"
+policy = "p2"
+purpose = "C/C++ 代码格式化"
+docs = ["https://clang.llvm.org/docs/ClangFormat.html"]
+wsl = { latest = "23.1.1", manager = "manual", command = "在 lab/.tools/venv 中升级 clang-format", note = "装在项目 venv 里，不在系统 PATH" }
+
+# ---------------------------------------------------------------------------
+# 语言运行时
+# ---------------------------------------------------------------------------
+
+[[software]]
+id = "nodejs"
+name = "Node.js"
+category = "语言运行时"
+scenarios = ["company", "home"]
+status = "active"
+policy = "observe"
+purpose = "JS 运行时（非必要不升级）"
+docs = ["https://nodejs.org/en/about/previous-releases"]
+windows = { latest = "24.14.1", manager = "winget", package = "OpenJS.NodeJS.LTS", note = "winget 可升 26.13 LTS；按策略仅观察" }
+wsl = { latest = "22.22.2", manager = "apt", package = "nodejs", note = "NodeSource node_22.x；维护到 2027-04" }
+
+[[software]]
+id = "python"
+name = "Python"
+category = "语言运行时"
+scenarios = ["company", "home"]
+status = "active"
+policy = "observe"
+purpose = "Python 运行时（非必要不升级）"
+docs = ["https://docs.python.org/3/"]
+windows = { latest = "3.14.4", manager = "manual", command = "Python Install Manager 更新", note = "3.16 起停发传统 exe 安装器" }
+wsl = { latest = "3.12.3", manager = "apt", package = "python3", note = "另有 uv 管理的 3.9/3.11/3.12.10" }
+
+[[software]]
+id = "dotnet-runtime"
+name = ".NET Runtime 10"
+category = "语言运行时"
+scenarios = ["company"]
+status = "active"
+policy = "observe"
+purpose = ".NET 运行时"
+docs = ["https://learn.microsoft.com/en-us/dotnet/"]
+windows = { latest = "10.0.9", manager = "winget", package = "Microsoft.DotNet.Runtime.10", note = "10.0 为 LTS；.NET 11 GA 2026-11-10" }
+
+[[software]]
+id = "uv"
+name = "uv"
+category = "语言运行时"
+scenarios = ["company"]
+status = "active"
+policy = "observe"
+purpose = "Python 包与环境管理"
+docs = ["https://docs.astral.sh/uv/"]
+wsl = { latest = "0.11.7", manager = "manual", command = "官方安装脚本 uv self update", note = "0.13 升级会重写缓存格式" }
+
+[[software]]
+id = "bun"
+name = "Bun"
+category = "语言运行时"
+scenarios = ["company"]
+status = "active"
+policy = "observe"
+purpose = "JS 运行时 / 包管理"
+docs = ["https://bun.sh/docs"]
+wsl = { latest = "1.3.12", manager = "manual", command = "官方安装脚本 bun upgrade", note = "1.4 用 Rust 重写" }
+
+# ---------------------------------------------------------------------------
+# 容器
+# ---------------------------------------------------------------------------
+
+[[software]]
+id = "docker-ce"
+name = "Docker Engine (WSL)"
+category = "容器"
+scenarios = ["company"]
+status = "active"
+policy = "p1"
+purpose = "WSL 内原生 Docker（compose v5）"
+docs = ["https://docs.docker.com/"]
+wsl = { latest = "29.8.1", manager = "apt", packages = ["docker-ce", "docker-ce-cli", "containerd.io", "docker-compose-plugin"], note = "来自 Docker 官方 apt 源；日志轮转见 /etc/docker/daemon.json" }
+
+[[software]]
+id = "navicat"
+name = "Navicat Premium"
+category = "数据库与 API"
+scenarios = ["company"]
+status = "unused"
+policy = "hold"
+purpose = "数据库客户端"
+docs = ["https://www.navicat.com/en/support"]
+windows = { latest = "16.3.5", manager = "manual", command = "官网下载覆盖现有便携目录（路径不入库）", note = "不常用 · 停更跟踪" }
+
+[[software]]
+id = "apifox"
+name = "Apifox"
+category = "数据库与 API"
+scenarios = ["company"]
+status = "active"
+policy = "p1"
+purpose = "API 调试与文档"
+docs = ["https://docs.apifox.com/"]
+windows = { latest = "2.8.52", manager = "manual", command = "官方 NSIS 静默安装到本地软件目录（路径不入库）", note = "升级前保留 apifox.bak 回滚点" }
+
+# ---------------------------------------------------------------------------
+# 压缩
+# ---------------------------------------------------------------------------
+
+[[software]]
+id = "7zip"
+name = "7-Zip"
+category = "压缩"
+scenarios = ["company", "home"]
+status = "active"
+policy = "p0"
+purpose = "压缩/解压"
+docs = ["https://www.7-zip.org/"]
+windows = { latest = "26.05", manager = "winget", package = "7zip.7zip", note = "注册版与便携版并存，升级后同步" }
+
+[[software]]
+id = "snow-shot"
+name = "Snow Shot"
+category = "截图与看图"
+scenarios = ["company", "home"]
+status = "active"
+policy = "p0"
+purpose = "截图/贴图"
+docs = ["https://github.com/mg-chao/snow-apps"]
+windows = { latest = "1.4.4", manager = "manual", command = "官方 portable zip 原地替换现有目录（路径不入库）", note = "替换前保留 snowshot.bak 回滚点" }
+
+[[software]]
+id = "picview"
+name = "PicView"
+category = "截图与看图"
+scenarios = ["company", "home"]
+status = "active"
+policy = "p0"
+purpose = "看图（轻量）"
+docs = ["https://picview.org/"]
+windows = { latest = "5.0.1", manager = "manual", command = "官方 portable 包原地替换（路径不入库）" }
+
+# ---------------------------------------------------------------------------
+# 文件与磁盘
+# ---------------------------------------------------------------------------
+
+[[software]]
+id = "everything"
+name = "Everything"
+category = "文件与磁盘"
+scenarios = ["company", "home"]
+status = "active"
+policy = "p0"
+purpose = "快速文件搜索"
+docs = ["https://www.voidtools.com/support/everything/"]
+windows = { latest = "1.4.1.1032", manager = "winget", package = "voidtools.Everything", note = "便携版与注册版并存；服务以 LocalSystem 运行，替换 exe 需提权" }
+
+[[software]]
+id = "hibit"
+name = "HiBit Uninstaller"
+category = "文件与磁盘"
+scenarios = ["company"]
+status = "unused"
+policy = "hold"
+purpose = "卸载/清理"
+docs = ["https://www.hibitsoft.ir/Uninstaller.html"]
+windows = { latest = "3.2.70", manager = "manual", command = "官网 portable 包原地替换（路径不入库）" }
+
+[[software]]
+id = "diskgenius"
+name = "DiskGenius"
+category = "文件与磁盘"
+scenarios = ["company"]
+status = "unused"
+policy = "hold"
+purpose = "分区/数据恢复"
+docs = ["https://www.diskgenius.com/"]
+windows = { latest = "5.5.0", manager = "manual", command = "官网 portable 包原地替换（路径不入库）" }
+
+[[software]]
+id = "spacesniffer"
+name = "SpaceSniffer"
+category = "文件与磁盘"
+scenarios = ["company"]
+status = "unused"
+policy = "hold"
+purpose = "磁盘占用可视化"
+docs = ["http://www.uderzo.it/main_products/space_sniffer/"]
+windows = { latest = "1.3.0.2", manager = "manual", command = "官网 zip 原地替换（路径不入库）" }
+
+# ---------------------------------------------------------------------------
+# AI 工具
+# ---------------------------------------------------------------------------
+
+[[software]]
+id = "claude-code"
+name = "Claude Code"
+category = "AI 工具"
+scenarios = ["company"]
+status = "active"
+policy = "p1"
+purpose = "终端 AI 编码"
+docs = ["https://code.claude.com/docs/en/overview"]
+wsl = { latest = "2.1.278", manager = "npm", package = "@anthropic-ai/claude-code", note = "周更节奏" }
+
+[[software]]
+id = "codex-cli"
+name = "OpenAI Codex CLI"
+category = "AI 工具"
+scenarios = ["company"]
+status = "active"
+policy = "p1"
+purpose = "终端 AI 编码"
+docs = ["https://developers.openai.com/codex/"]
+wsl = { latest = "0.154.0", manager = "npm", package = "@openai/codex", note = "周更节奏" }
+
+[[software]]
+id = "dsh"
+name = "DeepSeek Harness (dsh)"
+category = "AI 工具"
+scenarios = ["company", "home"]
+status = "active"
+policy = "p0"
+purpose = "本地 AI agent harness"
+docs = ["https://github.com/deepseek-ai"]
+wsl = { latest = "0.2.1-rc.5", manager = "npm", package = "@deepseek-ai/dsh" }
+
+[[software]]
+id = "cc-switch"
+name = "CC Switch"
+category = "AI 工具"
+scenarios = ["company"]
+status = "unused"
+policy = "hold"
+purpose = "Claude Code 供应商切换"
+docs = ["https://ccswitch.io/zh/docs"]
+windows = { latest = "3.17.0", manager = "manual", command = "官网/Release 覆盖现有便携目录（路径不入库）", note = "4.0 有配置迁移成本；不常用 · 停更跟踪" }
+
+# ---------------------------------------------------------------------------
+# 办公与日常（公司机）
+# ---------------------------------------------------------------------------
+
+[[software]]
+id = "feishu"
+name = "飞书"
+category = "办公与日常"
+scenarios = ["company"]
+status = "active"
+policy = "hold"
+purpose = "公司 IM / 文档"
+windows = { latest = "未注册版本", manager = "manual", command = "应用内自动更新" }
+
+[[software]]
+id = "wechat"
+name = "微信"
+category = "办公与日常"
+scenarios = ["company"]
+status = "active"
+policy = "p2"
+purpose = "IM"
+docs = ["https://weixin.qq.com/"]
+windows = { latest = "4.1.9.30", manager = "winget", package = "Tencent.WeChat.Universal", note = "便携版为 4.1.15.13，比注册版新" }
+
+[[software]]
+id = "workbuddy"
+name = "WorkBuddy"
+category = "办公与日常"
+scenarios = ["company"]
+status = "active"
+policy = "p2"
+purpose = "腾讯协作工具"
+windows = { latest = "5.0.3", manager = "winget", package = "Tencent.WorkBuddy" }
+
+[[software]]
+id = "edge"
+name = "Microsoft Edge"
+category = "办公与日常"
+scenarios = ["company"]
+status = "active"
+policy = "observe"
+purpose = "系统浏览器"
+windows = { latest = "156.0.4314.58", manager = "manual", command = "系统自动更新" }
+
+[[software]]
+id = "nvidia-driver"
+name = "NVIDIA 图形驱动"
+category = "办公与日常"
+scenarios = ["company"]
+status = "active"
+policy = "p1"
+purpose = "显卡驱动（含 NVIDIA App / PhysX）"
+windows = { latest = "582.28", manager = "manual", command = "NVIDIA App 更新", note = "非必要不升级" }
+
+[[software]]
+id = "shuishan-ime"
+name = "水杉输入法"
+category = "办公与日常"
+scenarios = ["company"]
+status = "active"
+policy = "p1"
+purpose = "输入法"
+windows = { latest = "0.11.0", manager = "manual", command = "应用内更新" }
+
+# ---------------------------------------------------------------------------
+# 监控与调试
+# ---------------------------------------------------------------------------
+
+[[software]]
+id = "windbg"
+name = "WinDbg"
+category = "监控与调试"
+scenarios = ["company"]
+status = "active"
+policy = "p2"
+purpose = "Windows 调试器"
+docs = ["https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/"]
+windows = { latest = "1.2610.1001.0", manager = "manual", command = "Microsoft Store 更新" }
+
+[[software]]
+id = "zsh"
+name = "zsh"
+category = "命令行工具"
+scenarios = ["company", "home"]
+status = "active"
+policy = "p0"
+purpose = "默认 shell"
+docs = ["https://zsh.sourceforge.io/Doc/"]
+wsl = { latest = "5.9", manager = "apt", package = "zsh" }
+
+[[software]]
+id = "oh-my-zsh"
+name = "oh-my-zsh"
+category = "命令行工具"
+scenarios = ["company"]
+status = "active"
+policy = "p2"
+purpose = "zsh 框架与插件"
+docs = ["https://ohmyz.sh/"]
+wsl = { latest = "git 最新", manager = "manual", command = "git -C ~/.oh-my-zsh pull", note = "插件：autosuggestions / syntax-highlighting / you-should-use" }
+
+[[software]]
+id = "ripgrep"
+name = "ripgrep"
+category = "命令行工具"
+scenarios = ["company"]
+status = "active"
+policy = "p2"
+purpose = "递归搜索"
+docs = ["https://github.com/BurntSushi/ripgrep"]
+wsl = { latest = "14.1.0", manager = "apt", package = "ripgrep" }
+
+[[software]]
+id = "fd-find"
+name = "fd-find"
+category = "命令行工具"
+scenarios = ["company"]
+status = "active"
+policy = "p2"
+purpose = "查找文件（命令 fdfind）"
+docs = ["https://github.com/sharkdp/fd"]
+wsl = { latest = "9.0.0", manager = "apt", package = "fd-find" }
+
+[[software]]
+id = "bat"
+name = "bat"
+category = "命令行工具"
+scenarios = ["company"]
+status = "active"
+policy = "p2"
+purpose = "查看文件（Debian/Ubuntu 命令 batcat）"
+docs = ["https://github.com/sharkdp/bat"]
+wsl = { latest = "0.24.0", manager = "apt", package = "bat" }
+
+[[software]]
+id = "eza"
+name = "eza"
+category = "命令行工具"
+scenarios = ["company"]
+status = "active"
+policy = "p2"
+purpose = "列目录（替代 exa/ls）"
+docs = ["https://github.com/eza-community/eza"]
+wsl = { latest = "0.18.2", manager = "apt", package = "eza" }
+
+[[software]]
+id = "fzf"
+name = "fzf"
+category = "命令行工具"
+scenarios = ["company"]
+status = "active"
+policy = "p2"
+purpose = "模糊查找"
+docs = ["https://github.com/junegunn/fzf"]
+wsl = { latest = "0.44.1", manager = "apt", package = "fzf" }
+
+[[software]]
+id = "zoxide"
+name = "zoxide"
+category = "命令行工具"
+scenarios = ["company"]
+status = "active"
+policy = "p2"
+purpose = "智能目录跳转（z）"
+docs = ["https://github.com/ajeetdsouza/zoxide"]
+wsl = { latest = "0.9.3", manager = "apt", package = "zoxide" }
+
+[[software]]
+id = "yazi"
+name = "Yazi"
+category = "命令行工具"
+scenarios = ["company"]
+status = "active"
+policy = "p2"
+purpose = "终端文件管理器"
+docs = ["https://yazi-rs.github.io/docs/quick-start/"]
+wsl = { latest = "26.8.15", manager = "apt", package = "yazi" }
+
+[[software]]
+id = "btop"
+name = "btop"
+category = "命令行工具"
+scenarios = ["company"]
+status = "active"
+policy = "p2"
+purpose = "资源监控"
+docs = ["https://github.com/aristocratos/btop"]
+wsl = { latest = "1.3.0", manager = "apt", package = "btop" }
+
+[[software]]
+id = "duf"
+name = "duf"
+category = "命令行工具"
+scenarios = ["company"]
+status = "active"
+policy = "p2"
+purpose = "磁盘占用查看"
+docs = ["https://github.com/muesli/duf"]
+wsl = { latest = "0.8.1", manager = "apt", package = "duf" }
+
+[[software]]
+id = "jq"
+name = "jq"
+category = "命令行工具"
+scenarios = ["company"]
+status = "active"
+policy = "p2"
+purpose = "JSON 处理"
+docs = ["https://jqlang.github.io/jq/"]
+wsl = { latest = "1.7.1", manager = "apt", package = "jq" }
+
+[[software]]
+id = "ffmpeg"
+name = "ffmpeg"
+category = "命令行工具"
+scenarios = ["company"]
+status = "active"
+policy = "p2"
+purpose = "音视频处理"
+docs = ["https://ffmpeg.org/documentation.html"]
+wsl = { latest = "6.1.1", manager = "apt", package = "ffmpeg" }
+
+[[software]]
+id = "tmux"
+name = "tmux"
+category = "命令行工具"
+scenarios = ["company"]
+status = "active"
+policy = "p2"
+purpose = "终端复用"
+docs = ["https://github.com/tmux/tmux/wiki"]
+wsl = { latest = "3.4", manager = "apt", package = "tmux" }
+
+[[software]]
+id = "dust"
+name = "dust"
+category = "命令行工具"
+scenarios = ["company"]
+status = "active"
+policy = "p2"
+purpose = "目录大小可视化（替代 du）"
+docs = ["https://github.com/bootandy/dust"]
+wsl = { latest = "未记录", manager = "manual", command = "用 install-system.sh 或官方 release 更新 /usr/local/bin/dust" }
+
+[[software]]
+id = "httpie"
+name = "HTTPie"
+category = "命令行工具"
+scenarios = ["company"]
+status = "active"
+policy = "p2"
+purpose = "HTTP 客户端（http 命令）"
+docs = ["https://httpie.io/docs/cli"]
+wsl = { latest = "3.2.4", manager = "manual", command = "pipx upgrade httpie 或官方安装方式", note = "安装在 /usr/local/bin/http" }
+
+[[software]]
+id = "lazydocker"
+name = "lazydocker"
+category = "命令行工具"
+scenarios = ["company"]
+status = "active"
+policy = "p2"
+purpose = "Docker TUI"
+docs = ["https://github.com/jesseduffield/lazydocker"]
+wsl = { latest = "0.25.2", manager = "manual", command = "下载 release 覆盖 ~/.local/bin/lazydocker" }
+
+# ---------------------------------------------------------------------------
+# 家用机（macOS / 个人工具，待采集确认）
+# ---------------------------------------------------------------------------
+
+[[software]]
+id = "iterm2"
+name = "iTerm2"
+category = "家用机 · macOS"
+scenarios = ["home"]
+status = "watch"
+policy = "p2"
+purpose = "终端"
+docs = ["https://iterm2.com/"]
+macos = { latest = "未采集", manager = "manual", command = "brew install --cask iterm2", note = "主题：iTerm2-Color-Schemes / midnight-in-mojave" }
+
+[[software]]
+id = "hiddenbar"
+name = "Hidden Bar"
+category = "家用机 · macOS"
+scenarios = ["home"]
+status = "watch"
+policy = "p2"
+purpose = "状态栏图标管理"
+docs = ["https://github.com/dwarvesf/hidden"]
+macos = { latest = "未采集", manager = "manual", command = "brew install --cask hiddenbar" }
+
+[[software]]
+id = "keka"
+name = "Keka"
+category = "家用机 · macOS"
+scenarios = ["home"]
+status = "watch"
+policy = "p2"
+purpose = "压缩/解压"
+docs = ["https://www.keka.io/"]
+macos = { latest = "未采集", manager = "manual", command = "brew install --cask keka" }
+
+[[software]]
+id = "homebrew"
+name = "Homebrew"
+category = "家用机 · macOS"
+scenarios = ["home"]
+status = "watch"
+policy = "p2"
+purpose = "macOS 包管理"
+docs = ["https://brew.sh/"]
+macos = { latest = "未采集", manager = "manual", command = "/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)\"" }
+
+[[software]]
+id = "skim"
+name = "Skim"
+category = "家用机 · macOS"
+scenarios = ["home"]
+status = "watch"
+policy = "p2"
+purpose = "PDF 阅读/批注"
+docs = ["https://skim-app.sourceforge.io/"]
+macos = { latest = "未采集", manager = "manual", command = "brew install --cask skim" }
+
+[[software]]
+id = "maccy"
+name = "Maccy"
+category = "家用机 · macOS"
+scenarios = ["home"]
+status = "watch"
+policy = "p2"
+purpose = "macOS 剪贴板历史管理"
+docs = ["https://github.com/p0deje/Maccy"]
+macos = { latest = "未采集", manager = "manual", command = "brew install --cask maccy" }
+
+[[software]]
+id = "itraffic"
+name = "ITraffic"
+category = "家用机 · macOS"
+scenarios = ["home"]
+status = "watch"
+policy = "p2"
+purpose = "macOS 状态栏网速监控"
+macos = { latest = "未采集", manager = "manual", command = "GitHub 下载（原清单未给仓库地址）" }
+
+[[software]]
+id = "vmware-fusion"
+name = "VMware Fusion"
+category = "家用机 · macOS"
+scenarios = ["home"]
+status = "watch"
+policy = "p2"
+purpose = "虚拟机"
+docs = ["https://www.vmware.com/products/fusion.html"]
+macos = { latest = "未采集", manager = "manual", command = "brew install --cask vmware-fusion" }
+
+[[software]]
+id = "pixea"
+name = "Pixea"
+category = "家用机 · macOS"
+scenarios = ["home"]
+status = "watch"
+policy = "p2"
+purpose = "macOS 图片查看器"
+docs = ["https://www.jibapps.com/apps/pixea/"]
+macos = { latest = "未采集", manager = "manual", command = "App Store / 官网安装" }
+
+[[software]]
+id = "irfanview"
+name = "IrfanView"
+category = "家用机 · Windows"
+scenarios = ["home"]
+status = "watch"
+policy = "p2"
+purpose = "看图工具"
+docs = ["https://www.irfanview.com/"]
+windows = { latest = "未采集", manager = "manual", command = "官网安装包（家用 Windows 待确认）" }

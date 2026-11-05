@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+.venv/
+.env
+.env.local
+# 生成物，不入 git
+catalog/software.md

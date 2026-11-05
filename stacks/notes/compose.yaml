@@ -1,0 +1,36 @@
+# LeafWiki 本地笔记（仅本机 / 内网；认证关闭，勿直接暴露公网）
+name: notes
+
+services:
+  init-data:
+    image: ghcr.io/perber/leafwiki:latest
+    user: "0:0"
+    entrypoint: ["/bin/sh", "-c", "mkdir -p /app/data/root && chown -R 1000:1000 /app/data/root"]
+    volumes:
+      - ./books:/app/data/root
+    restart: "no"
+
+  leafwiki:
+    image: ghcr.io/perber/leafwiki:latest
+    container_name: leafwiki
+    depends_on:
+      init-data:
+        condition: service_completed_successfully
+    restart: always
+    ports:
+      - "40001:8080"
+    user: 1000:1000
+    volumes:
+      # 宿主机笔记目录挂载，文件夹就是书籍
+      - ./books:/app/data/root
+    environment:
+      # 认证关闭；该值仅用于满足启动校验，不是真实凭据
+      LEAFWIKI_JWT_SECRET: "${LEAFWIKI_JWT_SECRET:-local-only-auth-disabled}"
+      LEAFWIKI_ALLOW_INSECURE: "true"
+      LEAFWIKI_DISABLE_AUTH: "true"
+      # CSRF 保护无法通过配置关闭（v0.14.x 硬编码 3 天），但服务端只做
+      # 「Cookie == X-CSRF-Token」的比对，不校验 token 来源。这里在 <head>
+      # 注入一段脚本，每次打开页面都把 CSRF Cookie 续期到 1 年，
+      # 避免 3 天后编辑保存报 403「CSRF token missing」。
+      LEAFWIKI_INJECT_CODE_IN_HEADER: >-
+        <script>(()=>{try{const m=document.cookie.match(/(?:^|;\s*)leafwiki_csrf=([^;]+)/);const v=m?m[1]:Array.from(crypto.getRandomValues(new Uint8Array(32)),b=>b.toString(16).padStart(2,'0')).join('');document.cookie='leafwiki_csrf='+v+'; Path=/; Max-Age=31536000; SameSite=Lax'}catch(e){}})()</script>

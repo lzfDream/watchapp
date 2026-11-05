@@ -5,6 +5,7 @@
 - 软件目录：`catalog/software.toml`（唯一数据源）→ `catalog/software.md`（自动生成）
 - 机器基线：`machines/company.md`、`machines/home.md`
 - 更新记录：`updates/`
+- 自建容器栈：`stacks/`（navbook + notes，一键启动）
 - 服务命令：`scripts/watchapp.py`
 - Agent 协作：`AGENTS.md` + `.agents/skills/watchapp-software-ops/SKILL.md`
 
@@ -36,6 +37,11 @@ watchapp/
 │   └── 2026-11-03-radar.md    # 上游版本快照（本机 vs 上游）
 ├── scripts/
 │   └── watchapp.py            # list / show / stats / scan / check / install / update / render / validate / privacy
+├── stacks/                    # 自建容器栈（compose + 起停脚本）
+│   ├── navbook/compose.yaml   # 端口 5556；数据在 navbook/data
+│   ├── notes/compose.yaml     # 端口 40001；数据在 notes/books
+│   ├── up.sh / down.sh / status.sh
+│   └── README.md
 ├── .env.example               # 本地隐私目录模板（.env 已忽略）
 └── .agents/skills/watchapp-software-ops/SKILL.md
 ```
@@ -54,6 +60,9 @@ python3 scripts/watchapp.py install --all --scenario company --os wsl  # 场景�
 python3 scripts/watchapp.py update --all --os wsl    # 只打印 p0/p1 更新命令
 python3 scripts/watchapp.py privacy                   # 敏感信息扫描
 python3 scripts/watchapp.py scan                      # 按白名单扫描机器目录
+
+./stacks/up.sh                                       # 启动自建容器栈（navbook + notes）
+./stacks/status.sh                                   # 查看容器栈状态
 ```
 
 在 Windows 上（必须用 Windows Python，才能调用 winget）：

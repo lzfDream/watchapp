@@ -84,3 +84,4 @@ python.exe scripts\watchapp.py update --all --os windows --apply
 | 2026-11-03 | 公司机 | 首次全量扫描；11 项升级；仅观察 7 项运行时；P2 5 项 |
 | 2026-11-03 | 公司机 | 上游版本快照（本机 vs 上游），见 `2026-11-03-radar.md` |
 | 2026-11-05 | 公司机 / 家用机 | 清单调整：移除 19 条、家用机新增 9 条、P0 调整 9 条；实际卸载 6 项（Docker Desktop 保留） |
+| 2026-11-05 | 公司机 | 自建容器服务入清单：navbook / LeafWiki P1，stacks 一键启动 |

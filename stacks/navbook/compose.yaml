@@ -1,0 +1,27 @@
+# Navbook v1.0.0 书签导航（GHCR 镜像；数据在 ./data）
+name: navbook
+
+services:
+  init-data:
+    image: ghcr.io/lzfdream/navbook:1.0.0
+    user: "0:0"
+    entrypoint: ["/bin/sh", "-c", "mkdir -p /app/data && chown -R 1000:1000 /app/data"]
+    volumes:
+      - ./data:/app/data
+    restart: "no"
+
+  navbook:
+    image: ghcr.io/lzfdream/navbook:1.0.0
+    container_name: navbook
+    depends_on:
+      init-data:
+        condition: service_completed_successfully
+    restart: unless-stopped
+    ports:
+      - "5556:3000"
+    volumes:
+      - ./data:/app/data
+    environment:
+      TZ: Asia/Shanghai
+    security_opt:
+      - no-new-privileges:true

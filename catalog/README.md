@@ -68,6 +68,9 @@ note = "..."                  # 可选，平台级说明
 
 `scripts/watchapp.py` 会自动补上 winget 的 `--accept-source-agreements`、`--accept-package-agreements`、`--disable-interactivity` 等参数。
 
+> 自建容器服务用 `manual`，`command` 指向仓库内 `stacks/<name>/compose.yaml` 的 pull/up 命令；
+> `latest` 记录当前部署版本，实际升级由 `stacks/up.sh --pull` 完成。
+
 ## 4. 新增/修改流程
 
 1. 在 `software.toml` 追加条目；`id` 用英文 kebab-case。

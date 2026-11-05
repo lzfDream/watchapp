@@ -5,3 +5,7 @@ __pycache__/
 .env.local
 # 生成物，不入 git
 catalog/software.md
+
+# 自建容器栈的运行时数据（不入 git）
+stacks/navbook/data/
+stacks/notes/books/

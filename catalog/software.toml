@@ -5,8 +5,8 @@
 # 生成 catalog/software.md（勿手改生成物）。
 
 schema = 1
-updated = "2026-11-04"
-source = "toolchain-inventory 2026-11-03 扫描 + tools-config/software.md"
+updated = "2026-11-05"
+source = "toolchain-inventory 2026-11-03 扫描 + tools-config/software.md + 自建容器栈 2026-11-05"
 
 [preferences]
 # 个人安装习惯：便携优先；Windows 按领域分目录；开发环境用 WSL。
@@ -237,6 +237,34 @@ policy = "p1"
 purpose = "WSL 内原生 Docker（compose v5）"
 docs = ["https://docs.docker.com/"]
 wsl = { latest = "29.8.1", manager = "apt", packages = ["docker-ce", "docker-ce-cli", "containerd.io", "docker-compose-plugin"], note = "来自 Docker 官方 apt 源；日志轮转见 /etc/docker/daemon.json" }
+
+# ---------------------------------------------------------------------------
+# 自建容器服务
+# ---------------------------------------------------------------------------
+
+[[software]]
+id = "navbook"
+name = "Navbook 轻导航"
+category = "容器服务"
+scenarios = ["company"]
+status = "active"
+policy = "p1"
+purpose = "自建书签导航（Docker，持续跟进）"
+docs = ["https://github.com/lzfDream/navbook", "https://github.com/lzfDream/navbook/pkgs/container/navbook"]
+notes = "compose 在 stacks/navbook；端口 5556；数据/背景在 stacks/navbook/data（gitignored）。"
+wsl = { latest = "1.0.0", manager = "manual", command = "docker compose -f stacks/navbook/compose.yaml pull && docker compose -f stacks/navbook/compose.yaml up -d", note = "GHCR 镜像 ghcr.io/lzfdream/navbook:1.0.0；升级后同步 compose tag" }
+
+[[software]]
+id = "leafwiki"
+name = "LeafWiki 笔记"
+category = "容器服务"
+scenarios = ["company"]
+status = "active"
+policy = "p1"
+purpose = "自建 Markdown 笔记/知识库（Docker，持续跟进）"
+docs = ["https://github.com/perber/leafwiki"]
+notes = "compose 在 stacks/notes；端口 40001；认证关闭，仅本机/内网；数据在 stacks/notes/books（gitignored）。"
+wsl = { latest = "0.14.1", manager = "manual", command = "docker compose -f stacks/notes/compose.yaml pull && docker compose -f stacks/notes/compose.yaml up -d", note = "镜像 ghcr.io/perber/leafwiki:latest；当前 v0.14.1；升级前看上游 release" }
 
 [[software]]
 id = "navicat"

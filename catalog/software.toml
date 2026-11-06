@@ -5,7 +5,7 @@
 # 生成 catalog/software.md（勿手改生成物）。
 
 schema = 1
-updated = "2026-11-05"
+updated = "2026-11-06"
 source = "toolchain-inventory 2026-11-03 扫描 + tools-config/software.md + 自建容器栈 2026-11-05"
 
 [preferences]
@@ -50,7 +50,7 @@ status = "active"
 policy = "p0"
 purpose = "主力终端"
 docs = ["https://learn.microsoft.com/en-us/windows/terminal/"]
-windows = { latest = "1.25.2733.0", manager = "winget", package = "Microsoft.WindowsTerminal", note = "winget 报 0x80072ee2 时改用官方 msixbundle + Add-AppxPackage" }
+windows = { latest = "1.25.2609.30003", manager = "manual", command = "官方 portable zip 解压替换现有目录（路径不入库，按 D:\\software\\<领域>\\<软件> 模板放置）", note = "家用机用便携版，不走 winget；解压包内有 terminal-<版本> 一层子目录，注意取里面的文件。升级前把旧目录复制成 .bak-<旧版本>。公司机若为 Store/MSIX 安装仍走 winget，未复查" }
 
 [[software]]
 id = "powershell"
@@ -72,7 +72,7 @@ status = "active"
 policy = "p1"
 purpose = "Windows 包管理器"
 docs = ["https://learn.microsoft.com/en-us/windows/package-manager/"]
-windows = { latest = "1.29.380", manager = "winget", package = "Microsoft.AppInstaller" }
+windows = { latest = "1.29.380", manager = "manual", command = "官方 msixbundle + Add-AppxPackage", note = "自举包：不能用 winget 更新自己；下载 Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle 后管理员 PowerShell 执行 Add-AppxPackage，装完运行 winget --version 验证" }
 
 [[software]]
 id = "tabby"
@@ -104,7 +104,7 @@ status = "active"
 policy = "p0"
 purpose = "主力编辑器；WSL Remote 开发"
 docs = ["https://code.visualstudio.com/docs", "https://code.visualstudio.com/updates"]
-windows = { latest = "1.144.0", manager = "winget", package = "Microsoft.VisualStudioCode", scope = "user", note = "User 安装；升级前关闭 VS Code" }
+windows = { latest = "1.145.2", manager = "winget", package = "Microsoft.VisualStudioCode", scope = "user", note = "User 安装；升级前关闭 VS Code。家用机装在 D 盘但仍是 HKCU 用户级安装，安装器静默参数 /VERYSILENT /MERGETASKS=!runcode 可原地升级并保留扩展" }
 
 [[software]]
 id = "zed"
@@ -301,7 +301,7 @@ status = "active"
 policy = "p0"
 purpose = "压缩/解压"
 docs = ["https://www.7-zip.org/"]
-windows = { latest = "26.05", manager = "winget", package = "7zip.7zip", note = "注册版与便携版并存，升级后同步" }
+windows = { latest = "26.05", manager = "winget", package = "7zip.7zip", note = "注册版与便携版并存，升级后同步；家用机为便携版，官方 exe 用 7z x 解包后覆盖（路径不入库），作者不做代码签名属正常" }
 
 [[software]]
 id = "snow-shot"
@@ -338,7 +338,7 @@ status = "active"
 policy = "p0"
 purpose = "快速文件搜索"
 docs = ["https://www.voidtools.com/support/everything/"]
-windows = { latest = "1.4.1.1032", manager = "winget", package = "voidtools.Everything", note = "便携版与注册版并存；服务以 LocalSystem 运行，替换 exe 需提权" }
+windows = { latest = "1.4.1.1032", manager = "winget", package = "voidtools.Everything", note = "便携版与注册版并存；家用机以 Windows 服务方式运行（LocalSystem、自动启动），替换 exe 前必须停服务并提权；官方 zip 只含 exe 与 lng，配置文件 Everything.ini 不会被覆盖" }
 
 [[software]]
 id = "hibit"
